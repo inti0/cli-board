@@ -23,12 +23,13 @@ public class ArticleRepository {
         return true;
     }
 
-    public int findIndexById(int id) {
-        Optional<Article> optionalArticle = articles.stream()
-                .filter(article -> article.getId() == id)
-                .findFirst();
-
-        return optionalArticle.map(Article::getId).orElse(-1);
+    private int findIndexById(int id) {
+        for (int i = 0; i < articles.size(); i++) {
+            if (articles.get(i).getId() == id) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public boolean modifyArticle(int id, String title, String content) {
@@ -43,5 +44,10 @@ public class ArticleRepository {
 
     public List<Article> getArticles() {
         return new ArrayList<>(articles);
+    }
+
+    public Optional<Article> findArticleById(int id) {
+        int index = findIndexById(id);
+        return index == -1 ? Optional.empty() : Optional.of(articles.get(index));
     }
 }
