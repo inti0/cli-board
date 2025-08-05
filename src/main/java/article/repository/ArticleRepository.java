@@ -23,6 +23,7 @@ public class ArticleRepository {
         return true;
     }
 
+    //저장소에 해당 Id를 갖는 게시글이 없을 경우 -1 반환
     private int findIndexById(int id) {
         for (int i = 0; i < articles.size(); i++) {
             if (articles.get(i).getId() == id) {
