@@ -38,7 +38,7 @@ public class ArticleOutputView {
         System.out.println(stringBuilder.toString());
     }
 
-    public void printDeleteArticle() {
+    public void printDeleteArticleMessage() {
         System.out.println("=> 게시글이 삭제되었습니다.");
     }
 }
