@@ -1,6 +1,7 @@
-package article.view;
+package article.view.inputview;
 
-import article.domain.Article;
+import article.view.UpdateArticleDTO;
+import article.view.WriteArticleDTO;
 import java.util.Scanner;
 
 public class ArticleInputView {
