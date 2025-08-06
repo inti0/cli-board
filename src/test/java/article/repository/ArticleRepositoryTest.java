@@ -72,6 +72,7 @@ class ArticleRepositoryTest {
         Article modifiedArticle = articleRepository.findArticleById(3).get();
 
         SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(isModified).isTrue();
         softly.assertThat(oldArticle.getId()).isEqualTo(3);
         softly.assertThat(oldArticle.getTitle()).isEqualTo("샘플 제목3");
         softly.assertThat(oldArticle.getContent()).isEqualTo("샘플 내용3");
