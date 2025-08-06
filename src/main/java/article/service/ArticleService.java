@@ -5,7 +5,6 @@ import article.repository.ArticleRepository;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.util.List;
-import java.util.Optional;
 
 public class ArticleService {
 
@@ -31,7 +30,8 @@ public class ArticleService {
 
     public void updateArticle(UpdateArticleDTO updateArticleDTO) {
         int id = updateArticleDTO.id();
-        boolean isNotUpdated = !articleRepository.modifyArticle(id, updateArticleDTO.title(), updateArticleDTO.content());
+        boolean isNotUpdated = !articleRepository.modifyArticle(id, updateArticleDTO.title(),
+                updateArticleDTO.content());
         if (isNotUpdated) {
             throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
         }

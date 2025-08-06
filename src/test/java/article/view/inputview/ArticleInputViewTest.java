@@ -1,5 +1,6 @@
 package article.view.inputview;
 
+import article.domain.Article;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.io.ByteArrayOutputStream;
@@ -62,15 +63,15 @@ class ArticleInputViewTest {
     @Test
     @DisplayName("게시글 수정을 위한 제목과 내용을 입력받아 DTO로 반환한다")
     void readUpdateArticleTest() {
-        UpdateArticleDTO oldDto = new UpdateArticleDTO(1, "기존 제목 바다", "기존 내용 바다와 상어");
+        Article oldArticle = new Article(1, "기존 제목 바다", "기존 내용 바다와 상어");
         String input = "새 제목\n새 내용\n";
         articleInputView = new ArticleInputView(new Scanner(input));
 
-        UpdateArticleDTO newDto = articleInputView.readUpdateArticle(oldDto);
+        UpdateArticleDTO newDto = articleInputView.readUpdateArticle(oldArticle);
 
         String output = outputStream.toString();
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(newDto.id()).isEqualTo(oldDto.id());
+        softly.assertThat(newDto.id()).isEqualTo(oldArticle.getId());
         softly.assertThat(newDto.title()).isEqualTo("새 제목");
         softly.assertThat(newDto.content()).isEqualTo("새 내용");
         softly.assertThat(output).contains("제목 (현재: 기존 제목 바다): ");

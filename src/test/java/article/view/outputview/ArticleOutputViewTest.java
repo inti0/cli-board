@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import article.domain.Article;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,11 +49,13 @@ class ArticleOutputViewTest {
 
         articleOutputView.printArticles(articles);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
         assertThat(outputStream.toString())
                 .contains("번호 | 제목       | 등록일")
                 .contains("-----------------------------")
-                .contains("1    | 테스트 제목1  | 테스트 내용1")
-                .contains("3    | 테스트 제목22  | 테스트 내용22");
+                .contains("1    | 테스트 제목1  | %s".formatted(formatter.format(articles.get(0).getRegDate())))
+                .contains("3    | 테스트 제목22  | %s".formatted(formatter.format(articles.get(1).getRegDate())));
     }
 
     @Test

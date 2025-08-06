@@ -42,7 +42,7 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 목록 테스트")
+    @DisplayName("게시글 목록 테스트 추가")
     void listTest() {
         List<Article> articles = articleService.listArticles();
 
@@ -50,7 +50,23 @@ class ArticleServiceTest {
         assertThat(articles.size()).isEqualTo(3);
 
         articleService.writeArticle(new WriteArticleDTO("테스트 제목", "테스트 내용"));
-        assertThat(articles.size()).isEqualTo(4);
+        List<Article> afterWrite = articleService.listArticles();
+        assertThat(afterWrite.size()).isEqualTo(4);
+
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("게시글 목록 테스트 삭제")
+    void listTest2() {
+        List<Article> articles = articleService.listArticles();
+
+        SoftAssertions softly = new SoftAssertions();
+        assertThat(articles.size()).isEqualTo(3);
+
+        articleService.writeArticle(new WriteArticleDTO("테스트 제목", "테스트 내용"));
+        List<Article> afterWrite = articleService.listArticles();
+        assertThat(afterWrite.size()).isEqualTo(4);
 
         softly.assertAll();
     }
