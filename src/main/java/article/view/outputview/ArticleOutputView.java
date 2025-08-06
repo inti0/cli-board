@@ -38,11 +38,20 @@ public class ArticleOutputView {
         System.out.println(stringBuilder.toString());
     }
 
-    public void printDeleteArticleMessage() {
+    public void printDeleteSuccessMessage() {
         System.out.println("=> 게시글이 삭제되었습니다.");
     }
 
-    public void printUpdateSuccesMessage() {
+    public void printUpdateSuccessMessage() {
         System.out.println("=> 게시글이 수정되었습니다.");
+    }
+
+    public void printCommandList() {
+        System.out.println("명령어를 다시 입력해주세요.\n"
+                + "명령어 리스트) write, list, detail [id], update [id], delete [id]");
+    }
+
+    public void printErrorMessage(IllegalArgumentException e) {
+        System.out.println("[ERROR] : " + e.getMessage());
     }
 }

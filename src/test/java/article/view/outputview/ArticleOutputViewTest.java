@@ -70,8 +70,8 @@ class ArticleOutputViewTest {
 
     @Test
     @DisplayName("삭제 안내 메시지")
-    void printDeleteArticleMessageTest() {
-        articleOutputView.printDeleteArticleMessage();
+    void printDeleteSuccessMessageTest() {
+        articleOutputView.printDeleteSuccessMessage();
 
         assertThat(outputStream.toString()).contains("=> 게시글이 삭제되었습니다.");
     }

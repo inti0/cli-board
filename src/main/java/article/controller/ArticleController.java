@@ -21,35 +21,61 @@ public class ArticleController {
     }
 
     public void execute() {
-        boolean exitFlag = true;
-        while (exitFlag) {
-            String command = inputView.readCommand();
-            ParsedCommand parsedCommand;
-            try {
-                parsedCommand = ParsedCommand.of(command);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-                printCommandList();
+        while (true) {
+            ParsedCommand parsedCommand = readCommand();
+            //입력 오류로 인한 파싱 실패
+            if (parsedCommand == null) {
                 continue;
             }
 
-            String commandName = parsedCommand.getCommandName();
-            int id = parsedCommand.getId();
-            switch (commandName) {
-                case "write" -> writeArticle();
-                case "list" -> showArticles();
-                case "detail" -> showDetail(id);
-                case "update" -> updateArticle(id);
-                case "delete" -> deleteArticle(id);
-                case "exit" -> exitFlag = false;
-                default -> printCommandList();
+            //종료 조건
+            if (parsedCommand.getCommandName().equals("exit")) {
+                break;
+            }
+
+            //command 입력에 따라 동작 수행
+            try {
+                dispatchCommand(parsedCommand);
+            } catch (IllegalArgumentException e) {
+                printErrorMessage(e);
             }
         }
     }
 
-    private static void printCommandList() {
-        System.out.println("명령어를 다시 입력해주세요.\n"
-                + "명령어 리스트) write, list, detail [id], update [id], delete [id]");
+    private ParsedCommand readCommand() {
+        String command = inputView.readCommand();
+        ParsedCommand parsedCommand;
+
+        try {
+            parsedCommand = ParsedCommand.of(command);
+        } catch (IllegalArgumentException e) {
+            printErrorMessage(e);
+            printCommandList();
+            return null;
+        }
+
+        return parsedCommand;
+    }
+
+    private void printErrorMessage(IllegalArgumentException e) {
+        outputView.printErrorMessage(e);
+    }
+
+    private void printCommandList() {
+        outputView.printCommandList();
+    }
+
+    private void dispatchCommand(ParsedCommand parsedCommand) {
+        String commandName = parsedCommand.getCommandName();
+        int id = parsedCommand.getId();
+        switch (commandName) {
+            case "write" -> writeArticle();
+            case "list" -> showArticles();
+            case "detail" -> showDetail(id);
+            case "update" -> updateArticle(id);
+            case "delete" -> deleteArticle(id);
+            default -> printCommandList();
+        }
     }
 
     private void writeArticle() {
@@ -64,38 +90,19 @@ public class ArticleController {
     }
 
     private void showDetail(int id) {
-        Article article = findArticleWithId(id);
-        if (article == null) {
-            return;
-        }
+        Article article = articleService.findArticleWithId(id);
         outputView.printArticleDetail(article);
     }
 
-    private Article findArticleWithId(int id) {
-        try {
-            return articleService.findArticleWithId(id);
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
     private void updateArticle(int id) {
-        Article article = findArticleWithId(id);
-        if (article == null) {
-            return;
-        }
+        Article article = articleService.findArticleWithId(id);
         UpdateArticleDTO updateArticleDTO = inputView.readUpdateArticle(article);
         articleService.updateArticle(updateArticleDTO);
-        outputView.printUpdateSuccesMessage();
+        outputView.printUpdateSuccessMessage();
     }
 
     private void deleteArticle(int id) {
-        Article articleWithId = findArticleWithId(id);
-        if (articleWithId == null) {
-            return;
-        }
         articleService.deleteArticle(id);
-        outputView.printDeleteArticleMessage();
+        outputView.printDeleteSuccessMessage();
     }
 }
