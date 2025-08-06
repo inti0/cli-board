@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 class ParsedCommandTest {
 
-    // 2. @ParameterizedTest를 사용한 테스트 (권장)
     @ParameterizedTest
     @DisplayName("유효한 형식의 명령어는 정상적으로 파싱된다.")
     @CsvSource({
@@ -20,13 +19,8 @@ class ParsedCommandTest {
             "delete 789, delete, 789"
     })
     void test_valid_commands(String input, String expectedCommand, int expectedId) {
-        // given
-        // @CsvSource가 테스트 데이터를 제공
-
-        // when
         ParsedCommand parsedCommand = ParsedCommand.of(input);
 
-        // then
         assertThat(parsedCommand.getCommandName()).isEqualTo(expectedCommand);
         assertThat(parsedCommand.getId()).isEqualTo(expectedId);
     }
@@ -40,7 +34,6 @@ class ParsedCommandTest {
             "123 456"       // 숫자만 사용
     })
     void test_invalid_commands_should_throw_exception(String input) {
-        // when & then
         assertThatThrownBy(() -> ParsedCommand.of(input))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("패턴 매칭 오류");

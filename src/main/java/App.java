@@ -9,7 +9,7 @@ public class App {
     }
 
     void run() {
-        System.out.println("=== CLI 게시판 구동 === ");
+        System.out.println("=== CLI 게시판 구동 ===");
         articleController.execute();
     }
 }

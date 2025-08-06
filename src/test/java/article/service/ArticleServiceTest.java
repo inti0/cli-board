@@ -8,7 +8,6 @@ import article.repository.ArticleRepository;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.util.List;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -37,12 +36,14 @@ class ArticleServiceTest {
         Article writtenArticle = articleService.findArticleWithId(4);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThat(writtenArticle.getId()).isEqualTo("테스트 제목");
+        softly.assertThat(writtenArticle.getId()).isEqualTo(4);
+        softly.assertThat(writtenArticle.getTitle()).isEqualTo("테스트 제목");
         softly.assertThat(writtenArticle.getContent()).isEqualTo("테스트 내용");
+        softly.assertAll();
     }
 
     @Test
-    @DisplayName("게시글 목록 테스트 추가")
+    @DisplayName("게시글 목록 테스트 : 추가")
     void listTest() {
         List<Article> articles = articleService.listArticles();
 
@@ -57,8 +58,8 @@ class ArticleServiceTest {
     }
 
     @Test
-    @DisplayName("게시글 목록 테스트 삭제")
-    void listTest2() {
+    @DisplayName("게시글 목록 테스트 : 삭제")
+    void listTestAfterDelete() {
         List<Article> articles = articleService.listArticles();
 
         SoftAssertions softly = new SoftAssertions();
@@ -87,7 +88,7 @@ class ArticleServiceTest {
 
     @Test
     @DisplayName("게시글 수정 테스트")
-    void updateest() {
+    void updateTest() {
         UpdateArticleDTO updateArticleDTO = new UpdateArticleDTO(2, "테스트 제목", "테스트 내용");
 
         Article oldArticle = articleService.findArticleWithId(2);
@@ -108,7 +109,8 @@ class ArticleServiceTest {
     @DisplayName("게시글 수정 실패 테스트 : 존재하지 않는 Id로 수정하려고 할 경우 예외가 발생한다.")
     void updateFailTest() {
         UpdateArticleDTO updateArticleDTO = new UpdateArticleDTO(0, "테스트 제목", "테스트 내용");
-        assertThatThrownBy(() -> articleService.updateArticle(updateArticleDTO)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> articleService.updateArticle(updateArticleDTO)).isInstanceOf(
+                IllegalArgumentException.class);
     }
 
     @Test
@@ -119,7 +121,8 @@ class ArticleServiceTest {
         articleService.deleteArticle(3);
 
         SoftAssertions softly = new SoftAssertions();
-        softly.assertThatThrownBy(() -> articleService.findArticleWithId(3)).isInstanceOf(IllegalArgumentException.class);
+        softly.assertThatThrownBy(() -> articleService.findArticleWithId(3))
+                .isInstanceOf(IllegalArgumentException.class);
         softly.assertThatThrownBy(() -> articleService.deleteArticle(3)).isInstanceOf(IllegalArgumentException.class);
     }
 
