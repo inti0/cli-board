@@ -10,7 +10,7 @@ import java.util.Optional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final String NO_ARTICLE_FOUND_WITH_ID = "No article found with id: ";
+    private final String NO_ARTICLE_FOUND_WITH_ID = "해당하는 ID의 게시글을 찾을 수 없음 id : ";
 
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
@@ -31,13 +31,10 @@ public class ArticleService {
 
     public void updateArticle(UpdateArticleDTO updateArticleDTO) {
         int id = updateArticleDTO.id();
-        Optional<Article> optionalArticle = articleRepository.findArticleById(id);
-        if (optionalArticle.isPresent()) {
-            Article article = optionalArticle.get();
-            articleRepository.modifyArticle(id, updateArticleDTO.title(), updateArticleDTO.content());
-            return;
+        boolean isNotUpdated = !articleRepository.modifyArticle(id, updateArticleDTO.title(), updateArticleDTO.content());
+        if (isNotUpdated) {
+            throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
         }
-        throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
     }
 
     public void deleteArticle(int id) {
