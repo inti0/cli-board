@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class ParsedCommand {
 
-    private static final Pattern pattern = Pattern.compile("^(\\w+)( \\d+)?");
+    private static final Pattern pattern = Pattern.compile("^([a-zA-Z]+)( \\d+)?");
     private final String commandName;
     private final int id;
 
@@ -15,7 +15,7 @@ public class ParsedCommand {
     }
 
     public static ParsedCommand of(String command) {
-        Matcher matcher = pattern.matcher(command);
+        Matcher matcher = pattern.matcher(command.toLowerCase().trim());
         if (!matcher.matches()) {
             throw new IllegalArgumentException("패턴 매칭 오류 : " + command);
         }

@@ -58,8 +58,6 @@ src/
 │   └─ view
 │       ├─ ArticleInputView.java     ← 게시글 입력
 │       └─ ArticleOutputView.java    ← 게시글 출력
-└─ util
-    └─ Rq.java        ← 요청 유효성 검사
 ```
 
 ---
