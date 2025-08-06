@@ -29,6 +29,7 @@ public class ArticleController {
                 parsedCommand = ParsedCommand.of(command);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+                printCommandList();
                 continue;
             }
 
@@ -41,8 +42,14 @@ public class ArticleController {
                 case "update" -> updateArticle(id);
                 case "delete" -> deleteArticle(id);
                 case "exit" -> exitFlag = false;
+                default -> printCommandList();
             }
         }
+    }
+
+    private static void printCommandList() {
+        System.out.println("명령어를 다시 입력해주세요.\n"
+                + "명령어 리스트) write, list, detail [id], update [id], delete [id]");
     }
 
     private void writeArticle() {
