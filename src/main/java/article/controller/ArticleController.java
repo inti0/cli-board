@@ -90,7 +90,7 @@ public class ArticleController {
     }
 
     private void showDetail(int id) {
-        Article article = articleService.findArticleWithId(id);
+        Article article = articleService.showDetail(id);
         outputView.printArticleDetail(article);
     }
 

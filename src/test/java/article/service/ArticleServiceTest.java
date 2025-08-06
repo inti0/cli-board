@@ -131,4 +131,30 @@ class ArticleServiceTest {
     void deleteFailTest() {
         assertThatThrownBy(() -> articleService.deleteArticle(33)).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    @DisplayName("게시글 자세히보기를 하면 조회수가 오른다.")
+    void showDetailTest() {
+        Article article = articleService.showDetail(3);
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(article.getViewCount()).isEqualTo(1);
+
+        articleService.showDetail(3);
+        softly.assertThat(article.getViewCount()).isEqualTo(2);
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("단순히 객체가져오기를 하면 조회수가 오르지 않는다.")
+    void FindAndShowDetailIsDifferent() {
+        Article article = articleService.showDetail(3);
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(article.getViewCount()).isEqualTo(1);
+
+        articleService.findArticleWithId(3);
+        softly.assertThat(article.getViewCount()).isEqualTo(1);
+        softly.assertAll();
+    }
 }

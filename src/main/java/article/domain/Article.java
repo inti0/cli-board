@@ -8,6 +8,7 @@ public class Article {
     private final String title;
     private final String content;
     private final LocalDateTime regDate;
+    private int viewCount = 0;
 
     public Article(int id, String title, String content) {
         this.id = id;
@@ -30,5 +31,13 @@ public class Article {
 
     public LocalDateTime getRegDate() {
         return regDate;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void increaseViewCount() {
+        this.viewCount++;
     }
 }

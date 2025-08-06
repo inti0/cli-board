@@ -2,6 +2,7 @@ package article.repository;
 
 import article.domain.Article;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +45,9 @@ public class ArticleRepository {
     }
 
     public List<Article> getArticles() {
-        return new ArrayList<>(articles);
+        return articles.stream()
+                .sorted(Comparator.comparing(Article::getRegDate).reversed())
+                .toList();
     }
 
     public Optional<Article> findArticleById(int id) {

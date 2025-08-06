@@ -5,6 +5,7 @@ import article.repository.ArticleRepository;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.util.List;
+import java.util.Optional;
 
 public class ArticleService {
 
@@ -42,5 +43,15 @@ public class ArticleService {
         if (isNotRemoved) {
             throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
         }
+    }
+
+    public Article showDetail(int id) {
+        Optional<Article> optionalArticle = articleRepository.findArticleById(id);
+        if (optionalArticle.isPresent()) {
+            Article article = optionalArticle.get();
+            article.increaseViewCount();
+            return article;
+        }
+        throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
     }
 }

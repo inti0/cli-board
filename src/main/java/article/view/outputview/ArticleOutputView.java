@@ -30,7 +30,8 @@ public class ArticleOutputView {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("번호: %d\n".formatted(article.getId()))
                 .append("제목: %s\n".formatted(article.getTitle()))
-                .append("내용: %s\n".formatted(article.getContent()));
+                .append("내용: %s\n".formatted(article.getContent()))
+                .append("조회수: %d\n".formatted(article.getViewCount()));
 
         String dateFormat = DATE_TIME_FORMATTER.format(article.getRegDate());
         stringBuilder.append("등록일: %s\n".formatted(dateFormat));
