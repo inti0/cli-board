@@ -1,5 +1,6 @@
 package article.view.inputview;
 
+import article.domain.Article;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.util.Scanner;
@@ -26,10 +27,10 @@ public class ArticleInputView {
         return new WriteArticleDTO(title, content);
     }
 
-    public UpdateArticleDTO readUpdateArticle(UpdateArticleDTO updateArticleDTO) {
-        int id = updateArticleDTO.id();
-        String oldTitle = updateArticleDTO.title();
-        String oldContent = updateArticleDTO.content();
+    public UpdateArticleDTO readUpdateArticle(Article targetArticle) {
+        int id = targetArticle.getId();
+        String oldTitle = targetArticle.getTitle();
+        String oldContent = targetArticle.getContent();
 
         System.out.printf("제목 (현재: %s): ", oldTitle);
         String newTitle = scanner.nextLine();

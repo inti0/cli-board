@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ArticleOutputView {
 
-    public void printWriteArticleMessage() {
+    public void printWriteSuccessMessage() {
         System.out.println("=> 게시글이 등록되었습니다.");
     }
 
@@ -40,5 +40,9 @@ public class ArticleOutputView {
 
     public void printDeleteArticleMessage() {
         System.out.println("=> 게시글이 삭제되었습니다.");
+    }
+
+    public void printUpdateSuccesMessage() {
+        System.out.println("=> 게시글이 수정되었습니다.");
     }
 }

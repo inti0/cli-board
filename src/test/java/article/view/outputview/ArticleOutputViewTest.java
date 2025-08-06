@@ -33,7 +33,7 @@ class ArticleOutputViewTest {
     @Test
     @DisplayName("등록 안내 메시지")
     void writeArticleMessageTest() {
-        articleOutputView.printWriteArticleMessage();
+        articleOutputView.printWriteSuccessMessage();
 
         assertThat(outputStream.toString()).contains("=> 게시글이 등록되었습니다.");
     }
