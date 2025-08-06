@@ -24,7 +24,7 @@ public class ArticleService {
         return articleRepository.getArticles();
     }
 
-    public Article getArticleWithId(int id) {
+    public Article findArticleWithId(int id) {
         return articleRepository.findArticleById(id)
                 .orElseThrow(() -> new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id));
     }
