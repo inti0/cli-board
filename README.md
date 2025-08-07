@@ -1,9 +1,6 @@
 # CLI 자바 서비스 만들기
 
 ---
-
-# ✅ CLI 자바 서비스 만들기 (콘솔 기반)
-
 ## 🎯 개요
 
 이 과제는 **Java 콘솔 프로그램**으로 간단한 텍스트 게시판을 구현하는 프로젝트입니다.
@@ -12,35 +9,40 @@ Java 기본 문법, 클래스 및 객체지향 설계, 사용자 입력 처리, 
 
 ---
 
-## 🧩 전체 기능 예시
+## 🧩 전체 기능
 
-| 기능 | 설명 |
-| --- | --- |
-| 게시글 작성 | `write` 명령어 입력 시 제목/내용을 받아 새 게시글 생성 |
-| 게시글 목록 | `list` 명령어 입력 시 모든 게시글을 번호순으로 출력 |
-| 게시글 상세보기 | `detail [id]` 명령어로 특정 게시글 내용을 전체 확인 |
-| 게시글 수정 | `update [id]` 명령어로 제목/내용을 수정 |
-| 게시글 삭제 | `delete [id]` 명령어로 해당 글 삭제 |
-| 종료 | `exit` 명령어로 프로그램 종료 |
+| 기능       | 설명                                          |
+|----------|---------------------------------------------|
+| 게시글 작성   | `write` 명령어 입력 시 제목/내용을 받아 새 게시글 생성         |
+| 게시글 목록   | `list` 명령어 입력 시 모든 게시글을 정렬하여 출력(기본정렬 : 최신순) |
+| 게시글 상세보기 | `detail [id]` 명령어로 특정 게시글 내용을 전체 확인         |
+| 게시글 수정   | `update [id]` 명령어로 제목/내용을 수정                |
+| 게시글 삭제   | `delete [id]` 명령어로 해당 글 삭제                  |
+| 게시글 검색   | `search` 명령어로 제목 + 내용에 해당 keyword가 있는지 검색   |
+| 종료       | `exit` 명령어로 프로그램 종료                         |
 
 ---
 
-## ✅ 게시글 데이터 구조 예시
+## ✅ 게시글 데이터 구조
+
+게시글(Article)에 setter는 없으며 viewCount를 제외한 모든 필드는 불변이다.
+- viewCount는 `increaseViewCount`로만 변경된다.
 
 ```java
 import java.time.LocalDateTime;
 
 class Article {
-    int id;
-    String title;
-    String content;
-    LocalDateTime regDate;
+    private final int id;
+    private final String title;
+    private final String content;
+    private final LocalDateTime regDate;
+    private int viewCount = 0;
 }
 ```
 
 ---
 
-## ⚙️ 주요 클래스 및 파일 구조 예시
+## ⚙️ 주요 클래스 및 파일 구조
 
 ```
 src/
@@ -52,13 +54,15 @@ src/
 │   ├─ domain
 │   │   └─ Article.java              ← 게시글 데이터 클래스
 │   ├─ repository
-│   │   └─ ArticleRepository.java    ← 게시글 데이터 저장/관리
+│   │   └─ ArticleRepository.java    ← 게시글 데이터 저장/관리 (메모리)
 │   ├─ service
 │   │   └─ ArticleService.java       ← 게시글 서비스
 │   └─ view
 │       ├─ ArticleInputView.java     ← 게시글 입력
 │       └─ ArticleOutputView.java    ← 게시글 출력
 ```
+
+DTO, enum과 같은 부수적인 클래스는 해당 객체를 **생성하는** 계층에 같이 두었음.
 
 ---
 
@@ -72,7 +76,6 @@ src/
 | `showDetail(int id)` | 특정 글 상세 내용 출력 |
 | `updateArticle(int id)` | 게시글 수정 처리 |
 | `deleteArticle(int id)` | 게시글 삭제 처리 |
-| `getCurrentDate()` | 현재 날짜 리턴 (yyyy-MM-dd 형식) |
 
 ---
 
@@ -85,6 +88,13 @@ src/
 => 게시글이 등록되었습니다.
 
 명령어: list
+기본 정렬(최신순)으로 나타냅니까? (Y/N)
+Y
+시간순 번호순 중 하나를 입력하세요.
+시간순
+오름차순 내림차순 중 하나를 입력하세요.
+오름차순
+
 번호 | 제목       | 등록일
 -----------------------------
 1    | 자바 공부  | 2025-08-03
@@ -105,29 +115,42 @@ src/
 
 명령어: exit
 프로그램을 종료합니다.
-
 ```
 
 ---
 
 ## 🎯 개발 포인트 요약
 
-| 기술 요소 | 적용 |
-| --- | --- |
-| 입력 처리 | `Scanner` 활용하여 명령어/데이터 입력 받기 |
-| 리스트 관리 | `ArrayList<Article>`로 게시글 목록 관리 |
-| 날짜 처리 | `LocalDate.now()` 또는 `SimpleDateFormat` 활용 |
-| 정렬 | 최신글이 위로 오도록 `list()` 역순 출력 |
-| 객체지향 설계 | 게시글 클래스 분리, 메서드 역할 분리 |
+| 기술 요소     | 적용                                     |
+|-----------|----------------------------------------|
+| 입력 처리     | `Scanner` 활용하여 명령어/데이터 입력 받기           |
+| 게시글 관리    | `ArrayList<Article>`로 게시글 목록 관리        |
+| 날짜 처리     | `LocalDate.now()`,  `DateFormatter` 활용 |
+| 정렬        | 최신글(기본정렬)이 위로 오도록 `list()` 역순 출력       |
+| 객체지향 설계   | 게시글 클래스 분리, 메서드 역할 분리                  |
+| 단위 테스트    | 클래스별로 단위 테스트 작성                        |
+| App 통합테스트 | 어플리케이션 통합 테스트                          |
 
 ---
 
 ## ✅ 추가 기능 구현 예시
 
-- [ ]  게시글 조회수 기능 (`count` 필드 추가)
-- [ ]  게시글 검색 기능 (`search [keyword]`)
-- [ ]  파일 저장/불러오기 (`BufferedWriter`, `BufferedReader` 등 활용)
-- [ ]  게시글 정렬 옵션 (날짜순, 번호순 등)
+- [ ]  게시글 조회수 기능 (`viewCount` 필드 추가)
+- [ ]  게시글 검색 기능 (`search`)
+- [ ]  게시글 정렬 옵션 (날짜순, 번호순, 오름차순, 내림차순)
+
+---
+
+## 🔍 부족한 부분 & 고민한 부분
+
+- 시간순 정렬 기능을 만들었지만, 현재 article 객체는 등록일 필드만 있어서 게시글 작성 이후로 시간변경은 이루어지지 않음.
+  - 따라서, 번호순(ID순) 정렬과 완전히 동일한 기능을 함.
+  - modifyDate필드와 setter, update시 변경하도록 하여 기능 구현 가능
+- 컨트롤러 단위테스트 코드가 부족함 -> AI에게 시켰음
+- 통합테스트 코드가 부족함
+- DTO record 와 SortStrategy enum을 어느 패키지에 두어야 할지 아직도 고민이 됨
+- outputView 비즈니스로직에 의해 출력되는 부분만 테스트할까 고민 했는데 정적인 출력도 테스트 해야할지 싶음 (우선순위는 밀리는 듯)
+
 
 ---
 

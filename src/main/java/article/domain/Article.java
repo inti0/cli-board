@@ -8,13 +8,14 @@ public class Article {
     private final String title;
     private final String content;
     private final LocalDateTime regDate;
-    private int viewCount = 0;
+    private int viewCount;
 
     public Article(int id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.regDate = LocalDateTime.now();
+        this.viewCount = 0;
     }
 
     public int getId() {
