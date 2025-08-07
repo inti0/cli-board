@@ -5,6 +5,7 @@ import article.service.ArticleService;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import article.view.inputview.ArticleInputView;
+import article.view.ListArticlesDto;
 import article.view.outputview.ArticleOutputView;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class ArticleController {
         int id = parsedCommand.getId();
         switch (commandName) {
             case "write" -> writeArticle();
-            case "list" -> showArticles();
+            case "list" -> listArticles();
             case "detail" -> showDetail(id);
             case "update" -> updateArticle(id);
             case "delete" -> deleteArticle(id);
@@ -84,8 +85,9 @@ public class ArticleController {
         outputView.printWriteSuccessMessage();
     }
 
-    private void showArticles() {
-        List<Article> articles = articleService.listArticles();
+    private void listArticles() {
+        ListArticlesDto listArticlesDto = inputView.readListArticles();
+        List<Article> articles = articleService.listArticles(listArticlesDto);
         outputView.printArticles(articles);
     }
 

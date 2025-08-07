@@ -4,6 +4,8 @@ import article.domain.Article;
 import article.repository.ArticleRepository;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
+import article.view.ListArticlesDto;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +24,18 @@ public class ArticleService {
 
     public List<Article> listArticles() {
         return articleRepository.getArticles();
+    }
+
+    public List<Article> listArticles(ListArticlesDto listArticlesDto) {
+        boolean isBasicStrategy = listArticlesDto.isBasicStrategy();
+        if (isBasicStrategy) {
+            return listArticles();
+        }
+        String orderName = listArticlesDto.orderName();
+        String direction = listArticlesDto.direction();
+        Comparator<Article> comparator = SortStrategy.getComparator(orderName, direction);
+
+        return articleRepository.getArticles(comparator);
     }
 
     public Article findArticleWithId(int id) {

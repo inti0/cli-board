@@ -44,14 +44,22 @@ public class ArticleRepository {
         return true;
     }
 
+    public Optional<Article> findArticleById(int id) {
+        int index = findIndexById(id);
+        return index == -1 ? Optional.empty() : Optional.of(articles.get(index));
+    }
+
+    //생성일 기준 오름차순 정렬로 반환
     public List<Article> getArticles() {
         return articles.stream()
                 .sorted(Comparator.comparing(Article::getRegDate).reversed())
                 .toList();
     }
 
-    public Optional<Article> findArticleById(int id) {
-        int index = findIndexById(id);
-        return index == -1 ? Optional.empty() : Optional.of(articles.get(index));
+    //정렬방법에 따라 정렬하여 반환
+    public List<Article> getArticles(Comparator<Article> comparator) {
+        return articles.stream()
+                .sorted(comparator)
+                .toList();
     }
 }

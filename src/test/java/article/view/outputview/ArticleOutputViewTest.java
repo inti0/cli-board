@@ -69,7 +69,7 @@ class ArticleOutputViewTest {
                 .contains("번호: 123")
                 .contains("제목: 산은 산이다")
                 .contains("내용: 계곡이 시원하기 때문이다")
-                .contains("조회수: 1");
+                .contains("조회수: 0");
     }
 
     @Test

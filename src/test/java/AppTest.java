@@ -52,7 +52,7 @@ class AppTest {
     @DisplayName("게시글 작성 후 목록을 조회하면 작성한 게시글이 보인다.")
     void runTest_write_and_list() {
         // given: "write", "제목1", "내용1", "list", "exit" 명령어를 순차적으로 입력
-        String input = "write\n제목1\n내용1\nlist\nexit\n";
+        String input = "write\n제목1\n내용1\nlist\nY\nexit\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
 
         // when: App.run() 호출
