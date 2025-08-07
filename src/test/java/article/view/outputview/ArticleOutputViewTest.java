@@ -20,6 +20,8 @@ class ArticleOutputViewTest {
 
     ArticleOutputView articleOutputView = new ArticleOutputView();
 
+    static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @BeforeEach
     void beforeEach() {
         System.setOut(printStream);
@@ -31,11 +33,11 @@ class ArticleOutputViewTest {
     }
 
     @Test
-    @DisplayName("등록 안내 메시지")
+    @DisplayName("등록 성공 메시지")
     void writeArticleMessageTest() {
         articleOutputView.printWriteSuccessMessage();
 
-        assertThat(outputStream.toString()).contains("=> 게시글이 등록되었습니다.");
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace("=> 게시글이 등록되었습니다.");
     }
 
     @Test
@@ -48,13 +50,14 @@ class ArticleOutputViewTest {
 
         articleOutputView.printArticles(articles);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String expectedOutput = new StringBuilder()
+                .append("번호 | 제목       | 등록일\n")
+                .append("-----------------------------\n")
+                .append("1    | 테스트 제목1  | %s\n".formatted(DATE_FORMATTER.format(articles.get(0).getRegDate())))
+                .append("3    | 테스트 제목22  | %s\n".formatted(DATE_FORMATTER.format(articles.get(1).getRegDate())))
+                .toString();
 
-        assertThat(outputStream.toString())
-                .contains("번호 | 제목       | 등록일")
-                .contains("-----------------------------")
-                .contains("1    | 테스트 제목1  | %s".formatted(formatter.format(articles.get(0).getRegDate())))
-                .contains("3    | 테스트 제목22  | %s".formatted(formatter.format(articles.get(1).getRegDate())));
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace(expectedOutput);
     }
 
     @Test
@@ -64,18 +67,49 @@ class ArticleOutputViewTest {
 
         articleOutputView.printArticleDetail(article);
 
-        assertThat(outputStream.toString())
-                .contains("번호: 123")
-                .contains("제목: 산은 산이다")
-                .contains("내용: 계곡이 시원하기 때문이다")
-                .contains("조회수: 0");
+        String expectedOutput = new StringBuilder()
+                .append("번호: 123\n")
+                .append("제목: 산은 산이다\n")
+                .append("내용: 계곡이 시원하기 때문이다\n")
+                .append("조회수: 0\n")
+                .append("등록일: ").append(DATE_FORMATTER.format(article.getRegDate())).toString();
+
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace(expectedOutput);
     }
 
     @Test
-    @DisplayName("삭제 안내 메시지")
+    @DisplayName("삭제 성공 메시지")
     void printDeleteSuccessMessageTest() {
         articleOutputView.printDeleteSuccessMessage();
 
         assertThat(outputStream.toString()).contains("=> 게시글이 삭제되었습니다.");
+    }
+
+    @Test
+    @DisplayName("수정 성공 메시지")
+    void printUpdateSuccessMessageTest() {
+        articleOutputView.printUpdateSuccessMessage();
+
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace("=> 게시글이 수정되었습니다.");
+    }
+
+    @Test
+    @DisplayName("명령어 목록을 출력한다.")
+    void printCommandListTest() {
+        articleOutputView.printCommandList();
+
+        String expectedOutput = "명령어를 다시 입력해주세요.\n"
+                + "명령어 리스트) write, list, detail [id], update [id], delete [id], search";
+
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace(expectedOutput);
+    }
+
+    @Test
+    @DisplayName("에러 메시지를 출력한다.")
+    void printErrorMessageTest() {
+        IllegalArgumentException e = new IllegalArgumentException("테스트 에러 메시지");
+        articleOutputView.printErrorMessage(e);
+
+        assertThat(outputStream.toString()).isEqualToIgnoringWhitespace("[ERROR] : 테스트 에러 메시지");
     }
 }

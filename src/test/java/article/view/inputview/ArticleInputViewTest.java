@@ -1,5 +1,8 @@
 package article.view.inputview;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import article.domain.Article;
 import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
@@ -8,6 +11,7 @@ import java.io.PrintStream;
 import java.util.Scanner;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -78,5 +82,41 @@ class ArticleInputViewTest {
         softly.assertThat(output).contains("내용 (현재: 기존 내용 바다와 상어): ");
         softly.assertAll();
 
+    }
+
+    @Test
+    @DisplayName("게시글 목록은 추가 입력을 받아 정렬방법을 결정한다. : 기본정렬")
+    void listArticlesBasicTest() {
+        String input = "list\nY";
+        articleInputView = new ArticleInputView(new Scanner(input));
+
+        articleInputView.readCommand();
+        articleInputView.readListArticles();
+    }
+
+    @Test
+    @DisplayName("게시글 목록은 추가 입력을 받아 정렬방법을 결정한다. : 커스텀정렬")
+    void listArticlesCustomTest() {
+        String input = "list\nN\n시간순\n오름차순";
+        articleInputView = new ArticleInputView(new Scanner(input));
+
+        articleInputView.readCommand();
+        articleInputView.readListArticles();
+
+        assertThat(outputStream.toString()).contains("기본 정렬(최신순)으로 나타냅니까? (Y/N)")
+                .contains("시간순 번호순 중 하나를 입력하세요.")
+                .contains("오름차순 내림차순 중 하나를 입력하세요.");
+    }
+
+    @Test
+    @DisplayName("검색 입력")
+    void searchArticlesTest() {
+        String input = "search\nhi";
+        articleInputView = new ArticleInputView(new Scanner(input));
+
+        articleInputView.readCommand();
+        articleInputView.readSearchKeyword();
+
+        assertThat(outputStream.toString()).contains("검색할 문자열을 입력하세요.(제목 + 내용으로 검색합니다)");
     }
 }
