@@ -75,6 +75,7 @@ public class ArticleController {
             case "detail" -> showDetail(id);
             case "update" -> updateArticle(id);
             case "delete" -> deleteArticle(id);
+            case "search" -> searchArticles();
             default -> printCommandList();
         }
     }
@@ -106,5 +107,11 @@ public class ArticleController {
     private void deleteArticle(int id) {
         articleService.deleteArticle(id);
         outputView.printDeleteSuccessMessage();
+    }
+
+    private void searchArticles() {
+        String keyword = inputView.readSearchKeyword();
+        List<Article> articles = articleService.searchArticlesByKeyword(keyword);
+        outputView.printArticles(articles);
     }
 }

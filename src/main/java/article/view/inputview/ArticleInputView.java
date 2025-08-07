@@ -56,4 +56,9 @@ public class ArticleInputView {
 
         return new ListArticlesDto(false, orderName, direction);
     }
+
+    public String readSearchKeyword() {
+        System.out.println("검색할 문자열을 입력하세요.(제목 + 내용으로 검색합니다)");
+        return scanner.nextLine();
+    }
 }

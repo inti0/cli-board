@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 class ArticleRepositoryTest {
 
     private ArticleRepository articleRepository;
+
     @BeforeEach
     void setUp() {
         articleRepository = new ArticleRepository();
@@ -140,5 +141,39 @@ class ArticleRepositoryTest {
         softly.assertThat(articles.size()).isEqualTo(3);
         softly.assertThat(articlesOneRemoved.size()).isEqualTo(2);
         softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("게시글 제목 검색기능 테스트")
+    void searchTilteTest() {
+        articleRepository.addArticle("검색456", "테스트 내용");
+        articleRepository.addArticle("테스트 제목", "테스트 내용");
+
+        List<Article> articles = articleRepository.findArticlesByKeyword("검색");
+
+        Assertions.assertThat(articles.size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 내용 검색기능 테스트")
+    void searchContentTest() {
+        articleRepository.addArticle("테스트 제목", "테스트 내용");
+        articleRepository.addArticle("테스트 제목", "검색123");
+
+        List<Article> articles = articleRepository.findArticlesByKeyword("검색");
+
+        Assertions.assertThat(articles.size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 제목 + 내용 검색기능 테스트")
+    void searchKeywordTest() {
+        articleRepository.addArticle("검색", "검색");
+        articleRepository.addArticle("테스트 제목", "검색");
+        articleRepository.addArticle("검색", "테스트 내용");
+
+        List<Article> articles = articleRepository.findArticlesByKeyword("검색");
+
+        Assertions.assertThat(articles.size()).isEqualTo(3);
     }
 }

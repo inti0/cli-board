@@ -19,7 +19,6 @@ class ArticleOutputViewTest {
     PrintStream printStream = new PrintStream(outputStream);
 
     ArticleOutputView articleOutputView = new ArticleOutputView();
-    ;
 
     @BeforeEach
     void beforeEach() {

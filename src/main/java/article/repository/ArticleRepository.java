@@ -62,4 +62,10 @@ public class ArticleRepository {
                 .sorted(comparator)
                 .toList();
     }
+
+    public List<Article> findArticlesByKeyword(String keyword) {
+        return articles.stream()
+                .filter(article -> article.getContent().contains(keyword) || article.getTitle().contains(keyword))
+                .toList();
+    }
 }

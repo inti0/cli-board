@@ -49,7 +49,7 @@ public class ArticleOutputView {
 
     public void printCommandList() {
         System.out.println("명령어를 다시 입력해주세요.\n"
-                + "명령어 리스트) write, list, detail [id], update [id], delete [id]");
+                + "명령어 리스트) write, list, detail [id], update [id], delete [id], search");
     }
 
     public void printErrorMessage(IllegalArgumentException e) {

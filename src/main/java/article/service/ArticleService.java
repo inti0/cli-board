@@ -68,4 +68,8 @@ public class ArticleService {
         }
         throw new IllegalArgumentException(NO_ARTICLE_FOUND_WITH_ID + id);
     }
+
+    public List<Article> searchArticlesByKeyword(String keyword) {
+        return articleRepository.findArticlesByKeyword(keyword);
+    }
 }

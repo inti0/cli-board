@@ -9,6 +9,7 @@ import article.view.UpdateArticleDTO;
 import article.view.WriteArticleDTO;
 import java.util.Comparator;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -156,6 +157,44 @@ class ArticleServiceTest {
 
         articleService.findArticleWithId(3);
         softly.assertThat(article.getViewCount()).isEqualTo(1);
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("게시글 제목 검색기능 테스트")
+    void searchTitleTest() {
+        articleService.writeArticle(new WriteArticleDTO("검색456", "테스트 내용"));
+        articleService.writeArticle(new WriteArticleDTO("테스트 제목", "테스트 내용"));
+
+        List<Article> articles = articleService.searchArticlesByKeyword("검색");
+
+        Assertions.assertThat(articles.size()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("게시글 내용 검색기능 테스트")
+    void searchContentTest() {
+        articleService.writeArticle(new WriteArticleDTO("테스트 제목", "테스트 내용"));
+        articleService.writeArticle(new WriteArticleDTO("테스트 제목", "검색123"));
+
+        List<Article> articles = articleService.searchArticlesByKeyword("검색");
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(articles.size()).isEqualTo(1);
+        softly.assertAll();
+    }
+
+    @Test
+    @DisplayName("게시글 제목 + 내용 검색기능 테스트")
+    void searchKeywordTest() {
+        articleService.writeArticle(new WriteArticleDTO("검색", "테스트 내용"));
+        articleService.writeArticle(new WriteArticleDTO("테스트 제목", "검색"));
+        articleService.writeArticle(new WriteArticleDTO("검색", "검색"));
+
+        List<Article> articles = articleService.searchArticlesByKeyword("검색");
+
+        SoftAssertions softly = new SoftAssertions();
+        softly.assertThat(articles.size()).isEqualTo(3);
         softly.assertAll();
     }
 }
